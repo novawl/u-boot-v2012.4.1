@@ -57,6 +57,7 @@ extern unsigned int __machine_arch_type;
 #define MACH_TYPE_IQ80321              169
 #define MACH_TYPE_KS8695               180
 #define MACH_TYPE_SMDK2410             193
+#define MACH_TYPE_MICRO2440            194
 #define MACH_TYPE_CEIVA                200
 #define MACH_TYPE_VOICEBLUE            218
 #define MACH_TYPE_H5400                220
@@ -1644,6 +1645,18 @@ extern unsigned int __machine_arch_type;
 # define machine_is_smdk2410()	(machine_arch_type == MACH_TYPE_SMDK2410)
 #else
 # define machine_is_smdk2410()	(0)
+#endif
+
+#ifdef CONFIG_ARCH_MICRO2440
+# ifdef machine_arch_type
+#  undef machine_arch_type
+#  define machine_arch_type	__machine_arch_type
+# else
+#  define machine_arch_type	MACH_TYPE_MICRO2440
+# endif
+# define machine_is_micro2440()	(machine_arch_type == MACH_TYPE_MICRO2440)
+#else
+# define machine_is_micro2440()	(0)
 #endif
 
 #ifdef CONFIG_ARCH_CEIVA

@@ -35,6 +35,8 @@ SECTIONS
 	{
 		__image_copy_start = .;
 		CPUDIR/start.o (.text)
+		board/samsung/micro2440/libmicro2440.o (.text)
+		arch/arm/lib/libarm.o (.text)
 		*(.text)
 	}
 

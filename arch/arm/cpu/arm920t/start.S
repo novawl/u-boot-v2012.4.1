@@ -212,6 +212,10 @@ stack_setup:
 	cmp	r0, r6
 	beq	clear_bss		/* skip relocation */
 	mov	r1, r6			/* r1 <- scratch for copy_loop */
+#ifdef CONFIG_MICRO2440
+	ldr r2, _bss_start_ofs
+	bl  CopyCode2Ram    /* r0: source, r1: dest, r2: size */
+#else
 	ldr	r3, _bss_start_ofs
 	add	r2, r0, r3		/* r2 <- source end address	    */
 
@@ -220,6 +224,7 @@ copy_loop:
 	stmia	r1!, {r9-r10}		/* copy to   target address [r1]    */
 	cmp	r0, r2			/* until source end address [r2]    */
 	blo	copy_loop
+#endif
 
 #ifndef CONFIG_SPL_BUILD
 	/*
