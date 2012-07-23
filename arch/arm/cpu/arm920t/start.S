@@ -180,7 +180,18 @@ copyex:
 	 */
 #ifndef CONFIG_SKIP_LOWLEVEL_INIT
 	bl	cpu_init_crit
+#ifdef CONFIG_MICRO2440
+	ldr	sp, =(CONFIG_SYS_INIT_SP_ADDR)
+	bic	sp, sp, #7 /* 8-byte alignment for ABI compliance */
+	bl	board_early_init_f /* configure MPLL UPLL */
+
+	ldr	r0, =0x0
+	ldr	r1, =(CONFIG_SYS_TEXT_BASE)
+	ldr	r2, _end_ofs
+	bl	CopyCode2Ram    /* r0: source, r1: dest, r2: size */
+	ldr	pc, =call_board_init_f
 #endif
+#endif /* CONFIG_SKIP_LOWLEVEL_INIT */
 
 /* Set stackpointer in internal RAM to call board_init_f */
 call_board_init_f:
@@ -212,10 +223,6 @@ stack_setup:
 	cmp	r0, r6
 	beq	clear_bss		/* skip relocation */
 	mov	r1, r6			/* r1 <- scratch for copy_loop */
-#ifdef CONFIG_MICRO2440
-	ldr r2, _bss_start_ofs
-	bl  CopyCode2Ram    /* r0: source, r1: dest, r2: size */
-#else
 	ldr	r3, _bss_start_ofs
 	add	r2, r0, r3		/* r2 <- source end address	    */
 
@@ -224,7 +231,6 @@ copy_loop:
 	stmia	r1!, {r9-r10}		/* copy to   target address [r1]    */
 	cmp	r0, r2			/* until source end address [r2]    */
 	blo	copy_loop
-#endif
 
 #ifndef CONFIG_SPL_BUILD
 	/*

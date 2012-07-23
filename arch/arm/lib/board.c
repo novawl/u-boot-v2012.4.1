@@ -228,9 +228,15 @@ init_fnc_t *init_sequence[] = {
 #if defined(CONFIG_ARCH_CPU_INIT)
 	arch_cpu_init,		/* basic arch cpu dependent setup */
 #endif
+#ifdef CONFIG_MICRO2440
+#ifdef CONFIG_SKIP_LOWLEVEL_INIT
+	board_early_init_f,
+#endif
+#else /* CONFIG_MICRO2440 */
 #if defined(CONFIG_BOARD_EARLY_INIT_F)
 	board_early_init_f,
 #endif
+#endif /* CONFIG_MICRO2440 */
 #ifdef CONFIG_OF_CONTROL
 	fdtdec_check_fdt,
 #endif

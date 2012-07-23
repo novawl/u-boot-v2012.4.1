@@ -37,7 +37,7 @@
 #define NAND_BLOCK_MASK     (NAND_SECTOR_SIZE - 1)
 
 #define delay(x)		do { int i; \
-						  for (i = 0; i < (x); i++); } while(0)
+						  for (i = 0; i < (x); i++) asm volatile ("mov r0,r0"); } while(0)
 
 
 static void wait_idle(void)
@@ -131,19 +131,11 @@ static void micro2440_nand_read(unsigned char *buf, unsigned long start_addr, in
 	nand_deselect_chip();
 }
 
-static int bBootFrmNORFlash(void)
+int BootFrmNORFlash(void)
 {
-	volatile unsigned int *pdw = (volatile unsigned int *)0;
-	unsigned int dwVal;
+	volatile int *bwscon = (volatile int *)0x48000000;
 
-	dwVal = *pdw;
-	*pdw = 0x12345678;
-	if (*pdw != 0x12345678) {
-		return 1;
-	} else {
-		*pdw = dwVal;
-		return 0;
-	}
+	return (*bwscon >> 1) & 0x3;
 }
 
 int CopyCode2Ram(unsigned long start_addr, unsigned char *buf, int size)
@@ -152,7 +144,7 @@ int CopyCode2Ram(unsigned long start_addr, unsigned char *buf, int size)
 	unsigned int *pdwSrc;
 	int i;
 
-	if (bBootFrmNORFlash()) {
+	if (BootFrmNORFlash()) {
 		pdwDest = (unsigned int *)buf;
 		pdwSrc  = (unsigned int *)start_addr;
 		for (i = 0; i < size / 4; i++)
@@ -161,6 +153,5 @@ int CopyCode2Ram(unsigned long start_addr, unsigned char *buf, int size)
 		micro2440_nand_init();
 		micro2440_nand_read(buf, start_addr, size);
 	}
-
 	return 0;
 }
