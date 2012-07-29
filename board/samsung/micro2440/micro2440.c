@@ -140,3 +140,8 @@ ulong board_flash_get_legacy(ulong base, int banknum, flash_info_t *info)
 	return 1;
 }
 
+void enable_caches(void)
+{
+	//Implenment this to avoid WARNING...
+	return;
+}

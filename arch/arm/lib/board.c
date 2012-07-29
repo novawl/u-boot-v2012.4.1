@@ -448,6 +448,9 @@ void board_init_f(ulong bootflag)
 
 #if !defined(CONFIG_SYS_NO_FLASH)
 static char *failed = "*** failed ***\n";
+#ifdef CONFIG_MICRO2440
+extern int BootFrmNORFlash();
+#endif
 #endif
 
 /*
@@ -507,32 +510,38 @@ void board_init_r(gd_t *id, ulong dest_addr)
 	mem_malloc_init (malloc_start, TOTAL_MALLOC_LEN);
 
 #if !defined(CONFIG_SYS_NO_FLASH)
-	puts("Flash: ");
+#ifdef CONFIG_MICRO2440
+if (BootFrmNORFlash()) {
+#endif
+		puts("Flash: ");
 
-	flash_size = flash_init();
-	if (flash_size > 0) {
+		flash_size = flash_init();
+		if (flash_size > 0) {
 # ifdef CONFIG_SYS_FLASH_CHECKSUM
-		char *s = getenv("flashchecksum");
+			char *s = getenv("flashchecksum");
 
-		print_size(flash_size, "");
-		/*
-		 * Compute and print flash CRC if flashchecksum is set to 'y'
-		 *
-		 * NOTE: Maybe we should add some WATCHDOG_RESET()? XXX
-		 */
-		if (s && (*s == 'y')) {
-			printf("  CRC: %08X", crc32(0,
-				(const unsigned char *) CONFIG_SYS_FLASH_BASE,
-				flash_size));
-		}
-		putc('\n');
+			print_size(flash_size, "");
+			/*
+			 * Compute and print flash CRC if flashchecksum is set to 'y'
+			 *
+			 * NOTE: Maybe we should add some WATCHDOG_RESET()? XXX
+			 */
+			if (s && (*s == 'y')) {
+				printf("  CRC: %08X", crc32(0,
+					(const unsigned char *) CONFIG_SYS_FLASH_BASE,
+					flash_size));
+			}
+			putc('\n');
 # else	/* !CONFIG_SYS_FLASH_CHECKSUM */
-		print_size(flash_size, "\n");
+			print_size(flash_size, "\n");
 # endif /* CONFIG_SYS_FLASH_CHECKSUM */
-	} else {
-		puts(failed);
-		hang();
-	}
+		} else {
+			puts(failed);
+			hang();
+		}
+#ifdef CONFIG_MICRO2440
+}
+#endif
 #endif
 
 #if defined(CONFIG_CMD_NAND)
