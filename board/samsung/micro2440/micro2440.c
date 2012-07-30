@@ -80,8 +80,9 @@ int board_early_init_f(void)
 	writel(0x007FFFFF, &gpio->gpacon);
 	writel(0x00044555, &gpio->gpbcon);
 	writel(0x000007FF, &gpio->gpbup);
-	writel(0xAAAAAAAA, &gpio->gpccon);
+	writel(0xAAAAA6AA, &gpio->gpccon);
 	writel(0x0000FFFF, &gpio->gpcup);
+	writel(readl(&gpio->gpcdat)&~(1<<5),  &gpio->gpcdat);
 	writel(0xAAAAAAAA, &gpio->gpdcon);
 	writel(0x0000FFFF, &gpio->gpdup);
 	writel(0xAAAAAAAA, &gpio->gpecon);

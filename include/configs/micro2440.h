@@ -45,7 +45,7 @@
 /* input clock of PLL (the MICRO2440	has 12MHz input clock) */
 #define CONFIG_SYS_CLK_FREQ	12000000
 
-#undef CONFIG_USE_IRQ		/* we don't need IRQ/FIQ stuff */
+//#undef CONFIG_USE_IRQ		/* we don't need IRQ/FIQ stuff */
 
 #define CONFIG_CMDLINE_TAG	/* enable passing of ATAGs */
 #define CONFIG_SETUP_MEMORY_TAGS
@@ -75,6 +75,10 @@
 #define CONFIG_USB_KEYBOARD
 #define CONFIG_USB_STORAGE
 #define CONFIG_DOS_PARTITION
+#define CONFIG_USB_DEVICE 1
+#ifdef CONFIG_USB_DEVICE
+#define CONFIG_USE_IRQ 1
+#endif
 
 /************************************************************
  * RTC

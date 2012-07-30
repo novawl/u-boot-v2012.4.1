@@ -501,10 +501,20 @@ not_used:
 
 	.align	5
 irq:
+/*
 	get_irq_stack
 	irq_save_user_regs
 	bl	do_irq
 	irq_restore_user_regs
+*/
+	sub	lr, lr, #4
+	ldr	sp, IRQ_STACK_START
+	stmdb	sp!, {r0-r12, lr}
+
+	ldr	lr, =int_return
+	ldr	pc, =IRQ_Handle
+int_return:
+	ldmia	sp!, {r0-r12, pc}^
 
 	.align	5
 fiq:

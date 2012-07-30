@@ -100,9 +100,11 @@ struct s3c24x0_dma {
 	u32	dcsrc;
 	u32	dcdst;
 	u32	dmasktrig;
-#if defined(CONFIG_S3C2400) || defined(CONFIG_S3C2410) \
-		|| defined(CONFIG_S3C2440)
+#if defined(CONFIG_S3C2400)
 	u32	res[1];
+#endif
+#if defined(CONFIG_S3C2410) || defined (CONFIG_S3C2440)
+	u32 res[7];
 #endif
 };
 
@@ -320,13 +322,13 @@ struct s3c24x0_usb_device {
 	u8	index_reg;
 	u8	res9[7];
 	u8	maxp_reg;
-	u8	res10[7];
+	u8	res10[3];
 	u8	ep0_csr_in_csr1_reg;
 	u8	res11[3];
 	u8	in_csr2_reg;
-	u8	res12[3];
+	u8	res12[7];
 	u8	out_csr1_reg;
-	u8	res13[7];
+	u8	res13[3];
 	u8	out_csr2_reg;
 	u8	res14[3];
 	u8	out_fifo_cnt1_reg;
@@ -334,8 +336,15 @@ struct s3c24x0_usb_device {
 	u8	out_fifo_cnt2_reg;
 	u8	res16[3];
 #endif /*  __BIG_ENDIAN */
+	u32	res17[8];
 	struct s3c24x0_usb_dev_fifos	fifo[5];
-	struct s3c24x0_usb_dev_dmas	dma[5];
+	u32	res18[11];
+	//struct s3c24x0_usb_dev_dmas	dma[5];
+	struct s3c24x0_usb_dev_dmas	ep1;
+	struct s3c24x0_usb_dev_dmas ep2;
+	u8	res19[16];
+	struct s3c24x0_usb_dev_dmas ep3;
+	struct s3c24x0_usb_dev_dmas ep4;
 };
 
 
