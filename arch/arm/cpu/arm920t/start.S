@@ -219,6 +219,7 @@ relocate_code:
 stack_setup:
 	mov	sp, r4
 
+#ifndef CONFIG_MICRO2440
 	adr	r0, _start
 	cmp	r0, r6
 	beq	clear_bss		/* skip relocation */
@@ -272,12 +273,13 @@ fixnext:
 	cmp	r2, r3
 	blo	fixloop
 #endif
+#endif /* !CONFIG_MICRO2440 */
 
 clear_bss:
 #ifndef CONFIG_SPL_BUILD
 	ldr	r0, _bss_start_ofs
 	ldr	r1, _bss_end_ofs
-	mov	r4, r6			/* reloc addr */
+	ldr	r4, =_TEXT_BASE			/* reloc addr */
 	add	r0, r0, r4
 	add	r1, r1, r4
 	mov	r2, #0x00000000		/* clear			    */
@@ -305,7 +307,9 @@ _nand_boot_ofs:
 	ldr	r0, _board_init_r_ofs
 	adr	r1, _start
 	add	lr, r0, r1
+#ifndef CONFIG_MICRO2440
 	add	lr, lr, r9
+#endif
 	/* setup parameters for board_init_r */
 	mov	r0, r5		/* gd_t */
 	mov	r1, r6		/* dest_addr */

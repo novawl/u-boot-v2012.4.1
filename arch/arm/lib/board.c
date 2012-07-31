@@ -328,6 +328,10 @@ void board_init_f(ulong bootflag)
 
 	addr = CONFIG_SYS_SDRAM_BASE + gd->ram_size;
 
+#ifdef CONFIG_MICRO2440
+	addr -= CONFIG_SYS_U_BOOT_SIZE;
+#endif
+
 #ifdef CONFIG_LOGBUFFER
 #ifndef CONFIG_ALT_LB_ADDR
 	/* reserve kernel log buffer */
@@ -371,6 +375,7 @@ void board_init_f(ulong bootflag)
 #endif /* CONFIG_FB_ADDR */
 #endif /* CONFIG_LCD */
 
+#ifndef CONFIG_MICRO2440
 	/*
 	 * reserve memory for U-Boot code, data & bss
 	 * round down to next 4 kB limit
@@ -379,6 +384,9 @@ void board_init_f(ulong bootflag)
 	addr &= ~(4096 - 1);
 
 	debug("Reserving %ldk for U-Boot at: %08lx\n", gd->mon_len >> 10, addr);
+#else
+	addr &= ~(4096 - 1);
+#endif
 
 #ifndef CONFIG_SPL_BUILD
 	/*
@@ -435,13 +443,23 @@ void board_init_f(ulong bootflag)
 	dram_init_banksize();
 	display_dram_config();	/* and display it */
 
-	gd->relocaddr = addr;
+#ifdef CONFIG_MICRO2440
+	gd->relocaddr = CONFIG_SYS_TEXT_BASE;
 	gd->start_addr_sp = addr_sp;
-	gd->reloc_off = addr - _TEXT_BASE;
+	gd->reloc_off = 0;
 	debug("relocation Offset is: %08lx\n", gd->reloc_off);
 	memcpy(id, (void *)gd, sizeof(gd_t));
 
 	relocate_code(addr_sp, id, addr);
+#else
+    gd->relocaddr = addr;
+    gd->start_addr_sp = addr_sp;
+    gd->reloc_off = addr - _TEXT_BASE;
+    debug("relocation Offset is: %08lx\n", gd->reloc_off);
+    memcpy(id, (void *)gd, sizeof(gd_t));
+
+    relocate_code(addr_sp, id, addr);
+#endif
 
 	/* NOTREACHED - relocate_code() does not return */
 }

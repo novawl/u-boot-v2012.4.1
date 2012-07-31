@@ -38,7 +38,8 @@
 #define CONFIG_S3C2440		/* specifically a SAMSUNG S3C2440 SoC */
 #define CONFIG_MICRO2440	/* on a SAMSUNG MICRO2440 Board */
 
-#define CONFIG_SYS_TEXT_BASE	0x32000000
+#define CONFIG_SYS_U_BOOT_SIZE	768*1024 /* 768K for u-boot text. */
+#define CONFIG_SYS_TEXT_BASE	0x33F40000
 
 #define CONFIG_SYS_ARM_CACHE_WRITETHROUGH
 
@@ -181,6 +182,7 @@
 #define PHYS_FLASH_1		0x00000000 /* Flash Bank #0 */
 
 #define CONFIG_SYS_FLASH_BASE	PHYS_FLASH_1
+
 
 /*-----------------------------------------------------------------------
  * FLASH and environment organization
