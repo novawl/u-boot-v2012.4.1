@@ -612,9 +612,6 @@ if (BootFrmNORFlash()) {
 	interrupt_init();
 	/* enable exceptions */
 	enable_interrupts();
-#ifdef CONFIG_USB_DEVICE
-	usb_init_slave();
-#endif
 
 	/* Perform network card initialisation if necessary */
 #if defined(CONFIG_DRIVER_SMC91111) || defined (CONFIG_DRIVER_LAN91C96)
@@ -643,6 +640,10 @@ if (BootFrmNORFlash()) {
 	debug("Reset Ethernet PHY\n");
 	reset_phy();
 #endif
+#endif
+
+#ifdef CONFIG_USB_DEVICE
+	usb_init_slave();
 #endif
 
 #ifdef CONFIG_POST
