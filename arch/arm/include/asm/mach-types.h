@@ -57,7 +57,6 @@ extern unsigned int __machine_arch_type;
 #define MACH_TYPE_IQ80321              169
 #define MACH_TYPE_KS8695               180
 #define MACH_TYPE_SMDK2410             193
-#define MACH_TYPE_MICRO2440            194
 #define MACH_TYPE_CEIVA                200
 #define MACH_TYPE_VOICEBLUE            218
 #define MACH_TYPE_H5400                220
@@ -362,6 +361,7 @@ extern unsigned int __machine_arch_type;
 #define MACH_TYPE_AVENGERS_LITE        2104
 #define MACH_TYPE_MX51_BABBAGE         2125
 #define MACH_TYPE_RD78X00_MASA         2135
+#define MACH_TYPE_MICRO2440            2137
 #define MACH_TYPE_DM355_LEOPARD        2138
 #define MACH_TYPE_TS219                2139
 #define MACH_TYPE_PCA100               2149

@@ -63,6 +63,8 @@
 #define DM9000_DATA				(CONFIG_DM9000_BASE + 4)
 #define CONFIG_DM9000_USE_16BIT			1
 
+#define CONFIG_ETHADDR			0a:0b:55:4c:7d:00
+
 /*
  * select serial console configuration
  */
@@ -117,14 +119,16 @@
 #define CONFIG_CMDLINE_EDITING
 
 /* autoboot */
-#define CONFIG_BOOTDELAY	5
+#define CONFIG_BOOTDELAY	1
 #define CONFIG_BOOT_RETRY_TIME	-1
 #define CONFIG_RESET_TO_RETRY
 #define CONFIG_ZERO_BOOTDELAY_CHECK
 
+#define CONFIG_BOOTCOMMAND	"nand read.jffs2 32000000 kernel; bootm 32000000"
+
 #define CONFIG_NETMASK		255.255.255.0
-#define CONFIG_IPADDR		10.0.0.110
-#define CONFIG_SERVERIP		10.0.0.1
+#define CONFIG_IPADDR		192.168.1.199
+#define CONFIG_SERVERIP		192.168.1.200
 
 #if defined(CONFIG_CMD_KGDB)
 #define CONFIG_KGDB_BAUDRATE	115200	/* speed to run kgdb serial port */
@@ -205,6 +209,9 @@
 #define CONFIG_ENV_SIZE			0x10000
 /* allow to overwrite serial and ethaddr */
 #define CONFIG_ENV_OVERWRITE
+#define CONFIG_EXTRA_ENV_SETTINGS \
+	"mtdids=nand0=nandflash0\0" \
+	"mtdparts=mtdparts=nandflash0:704k(bootloader),64k(params),4m(kernel),-(root)\0"
 
 /*
  * Size of malloc() pool
@@ -230,6 +237,12 @@
 #define CONFIG_S3C24XX_TWRPH0	4
 #define CONFIG_S3C24XX_TWRPH1	1
 #endif
+
+#define MTDIDS_DEFAULT "nand0=nandflash0"
+#define MTDPARTS_DEFAULT "mtdparts=nandflash0:704k(bootloader)," \
+							"64k(params)," \
+							"4m(kernel)," \
+							"-(root)"
 
 /*
  * File system
