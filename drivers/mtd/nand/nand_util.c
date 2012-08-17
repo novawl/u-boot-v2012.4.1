@@ -515,6 +515,7 @@ int nand_write_skip_bad(nand_info_t *nand, loff_t offset, size_t *length,
 		return -EINVAL;
 	}
 
+#ifndef CONFIG_CMD_NAND_YAFFS
 	if (!need_skip && !(flags & WITH_DROP_FFS)) {
 		rval = nand_write (nand, offset, length, buffer);
 		if (rval == 0)
@@ -525,6 +526,7 @@ int nand_write_skip_bad(nand_info_t *nand, loff_t offset, size_t *length,
 			offset, rval);
 		return rval;
 	}
+#endif
 
 	while (left_to_write > 0) {
 		size_t block_offset = offset & (nand->erasesize - 1);
@@ -553,7 +555,7 @@ int nand_write_skip_bad(nand_info_t *nand, loff_t offset, size_t *length,
 
 			ops.len = pagesize;
 			ops.ooblen = nand->oobsize;
-			ops.mode = MTD_OOB_AUTO;
+			ops.mode = MTD_OOB_RAW;
 			ops.ooboffs = 0;
 
 			pages = write_size / pagesize_oob;
