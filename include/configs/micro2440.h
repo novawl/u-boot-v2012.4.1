@@ -123,7 +123,9 @@
 #define CONFIG_BOOT_RETRY_TIME	-1
 #define CONFIG_RESET_TO_RETRY
 #define CONFIG_ZERO_BOOTDELAY_CHECK
+#define CONFIG_MENUKEY
 
+#define CONFIG_BOOTARGS		"noinitrd root=/dev/mtdblock2 init=/linuxrc console=ttySAC0"
 #define CONFIG_BOOTCOMMAND	"nand read.jffs2 32000000 kernel; bootm 32000000"
 
 #define CONFIG_NETMASK		255.255.255.0
@@ -211,7 +213,8 @@
 #define CONFIG_ENV_OVERWRITE
 #define CONFIG_EXTRA_ENV_SETTINGS \
 	"mtdids=nand0=nandflash0\0" \
-	"mtdparts=mtdparts=nandflash0:704k(bootloader),64k(params),4m(kernel),-(root)\0"
+	"mtdparts=mtdparts=nandflash0:704k(bootloader),64k(params),4m(kernel),-(root)\0" \
+	"menucmd=menu\0"
 
 /*
  * Size of malloc() pool

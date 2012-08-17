@@ -267,6 +267,10 @@ int abortboot(int bootdelay)
 # endif	/* CONFIG_AUTOBOOT_KEYED */
 #endif	/* CONFIG_BOOTDELAY >= 0  */
 
+#ifdef CONFIG_MICRO2440
+extern int BootFrmNORFlash();
+#endif
+
 /****************************************************************************/
 
 void main_loop (void)
@@ -351,6 +355,7 @@ void main_loop (void)
 
 	debug ("### main_loop entered: bootdelay=%d\n\n", bootdelay);
 
+
 #if defined(CONFIG_MENU_SHOW)
 	bootdelay = menu_show(bootdelay);
 #endif
@@ -376,6 +381,9 @@ void main_loop (void)
 
 	debug ("### main_loop: bootcmd=\"%s\"\n", s ? s : "<UNDEFINED>");
 
+#ifdef CONFIG_MICRO2440
+	if (!BootFrmNORFlash()) {
+#endif
 	if (bootdelay >= 0 && s && !abortboot (bootdelay)) {
 # ifdef CONFIG_AUTOBOOT_KEYED
 		int prev = disable_ctrlc(1);	/* disable Control C checking */
@@ -387,14 +395,24 @@ void main_loop (void)
 		disable_ctrlc(prev);	/* restore Control C checking */
 # endif
 	}
+#ifdef CONFIG_MICRO2440
+	} else {
+#endif
 
 # ifdef CONFIG_MENUKEY
+#ifdef CONFIG_MICRO2440
+	{
+#else
 	if (menukey == CONFIG_MENUKEY) {
+#endif
 		s = getenv("menucmd");
 		if (s)
 			run_command(s, 0);
 	}
 #endif /* CONFIG_MENUKEY */
+#ifdef CONFIG_MICRO2440
+	}
+#endif
 #endif /* CONFIG_BOOTDELAY */
 
 	/*
