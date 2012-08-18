@@ -125,7 +125,7 @@
 #define CONFIG_ZERO_BOOTDELAY_CHECK
 #define CONFIG_MENUKEY
 
-#define CONFIG_BOOTARGS		"noinitrd root=/dev/mtdblock2 init=/linuxrc console=ttySAC0"
+#define CONFIG_BOOTARGS		"noinitrd root=/dev/mtdblock2 init=/linuxrc console=ttySAC0,115200"
 #define CONFIG_BOOTCOMMAND	"nand read.jffs2 32000000 kernel; bootm 32000000"
 
 #define CONFIG_NETMASK		255.255.255.0
